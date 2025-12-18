@@ -1,0 +1,45 @@
+// backend/server.js
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
+import { analyzeCode } from './services/llmClient.js';
+
+dotenv.config();
+console.log('Has OPENAI_API_KEY?', !!process.env.OPENAI_API_KEY);
+
+const app = express();
+const PORT = process.env.PORT || 4000;
+
+app.use(cors());
+app.use(bodyParser.json());
+
+app.post('/analyze', async (req, res) => {
+  try {
+    const { code, language, skillLevel } = req.body;
+
+    if (!code || code.trim().length === 0) {
+      return res.status(400).json({ error: 'No code provided.' });
+    }
+
+    const effectiveLanguage = language || 'auto';
+    const effectiveSkill = skillLevel || 'beginner';
+
+    const result = await analyzeCode({
+      code,
+      language: effectiveLanguage,
+      skillLevel: effectiveSkill,
+    });
+
+    res.json(result);
+  } catch (err) {
+    console.error('Error in /analyze:', err);
+    res.status(500).json({
+      error: 'Something went wrong while analyzing the code.',
+    });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Backend listening on port ${PORT}`);
+});

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>What Does This Code Do?</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    #code-input {
+  width: 100%;
+  min-height: 220px;
+  font-family: monospace;
+}
+
+#analysis-top-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 1rem;
+}
+
+#code-view-container,
+#walkthrough-container {
+  flex: 1;
+}
+
+#code-view {
+  background: #111;
+  color: #eee;
+  padding: 0.5rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  max-height: 260px;
+  overflow: auto;
+  white-space: pre;
+}
+
+/* Code lines */
+
+.code-line {
+  display: flex;
+}
+
+.line-number {
+  opacity: 0.6;
+  margin-right: 0.5rem;
+  min-width: 3ch;
+  text-align: right;
+  user-select: none;
+}
+
+.code-text {
+  white-space: pre;
+}
+
+/* Highlighted code lines */
+
+.code-line.highlight {
+  background: rgba(255, 255, 0, 0.22);
+}
+
+/* Walkthrough list */
+
+#walkthrough {
+  max-height: 260px;
+  overflow: auto;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Highlighted walkthrough step */
+
+.walkthrough-step.highlight-step {
+  background: rgba(0, 128, 255, 0.15);
+}
+
+  </style>
+
+</head>
+
+<body>
+  <h1>What Does This Code Do?</h1>
+  <p>Paste your code below and get a human-readable explanation.</p>
+
+  <div id="input-panel">
+    <label for="provider">Model provider:</label>
+    <select id="provider">
+      <option value="openai" selected>OpenAI</option>
+      <option value="gemini" disabled>Gemini (coming soon)</option>
+      <option value="anthropic" disabled>Claude (coming soon)</option>
+    </select>
+
+    <label for="model">Model:</label>
+    <select id="model">
+      <!-- OpenAI models for now -->
+      <option value="gpt-4.1-mini" selected>gpt-4.1-mini (fast, cheap)</option>
+      <option value="gpt-4.1">gpt-4.1 (higher quality)</option>
+      <option value="gpt-4o-mini">gpt-4o-mini</option>
+    </select>
+    <br />
+
+    <label for="language">Language:</label>
+    <select id="language">
+      <option value="auto">Auto-detect</option>
+      <option value="javascript">JavaScript</option>
+      <option value="python">Python</option>
+      <option value="csharp">C#</option>
+      <option value="php">PHP</option>
+    </select>
+
+    <label for="skill-level">Explanation level:</label>
+    <select id="skill-level">
+      <option value="beginner">Beginner-friendly</option>
+      <option value="intermediate">Intermediate</option>
+      <option value="expert">Expert (technical)</option>
+    </select>
+
+    <label for="code-input">Paste your code:</label>
+    <textarea id="code-input"></textarea>
+
+    <button id="analyze-btn" type="button">Analyze Code</button>
+
+    <div id="analysis-top-row">
+      <div id="code-view-container">
+        <p><strong>Analyzed code view</strong></p>
+        <pre id="code-view"></pre>
+      </div>
+
+      <div id="walkthrough-container">
+        <h2>Step-by-step walkthrough</h2>
+        <ul id="walkthrough"></ul>
+      </div>
+    </div>
+
+
+
+    <div id="output-panel" style="display: none;">
+      <h2>Summary</h2>
+      <button id="copy-summary-btn" type="button">Copy summary</button>
+      <p id="summary"></p>
+
+      <h2>Risk overview</h2>
+      <button id="copy-risk-btn" type="button">Copy summary + risk</button>
+      <p id="risk-overview"></p>
+
+      <h2>Plot holes & obstacles</h2>
+      <button id="copy-issues-btn" type="button">Copy all issues</button>
+
+      <h3>Performance</h3>
+      <ul id="issues-performance"></ul>
+
+      <h3>Security</h3>
+      <ul id="issues-security"></ul>
+
+      <h3>Maintainability</h3>
+      <ul id="issues-maintainability"></ul>
+
+      <h2>Reroutes to success (suggestions)</h2>
+      <button id="copy-suggestions-btn" type="button">Copy suggestions</button>
+      <ul id="suggestions"></ul>
+
+      <hr />
+
+      <button id="copy-full-report-btn" type="button">Copy full report</button>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
